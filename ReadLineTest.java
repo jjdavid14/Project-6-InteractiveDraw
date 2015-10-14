@@ -19,14 +19,26 @@ public class Proj6_ReadLineTest {
         //Create new Scanner object to take in user input
         Scanner in = new Scanner(System.in);
         
-        
+        /*
+         * Start loop:
+         * 1)ask user for two words separated by space (color shape)
+         * 2)separate the two words and check for errors
+         *   -if error is found, restart loop
+         * 3)display the separated words
+         * 4)start over loop
+         */
         while(in.hasNextLine()) {
+            String line = in.nextLine();   //store the line entered to line
+            int index = line.indexOf(' '); //find index of space
+            String firstWord = "";         //initialize first word to blank
+            String secondWord = "";        //initialize second word to blank
             
-            String line = in.nextLine();
-            int index = line.indexOf(' ');
-            String firstWord = "";
-            String secondWord = "";
-            
+            /*
+             * Checks number of spaces, if > 1 prints error and restart loop.
+             * Checks if two words were entered if not print error and resart
+             * loop.
+             * If no errors, separates the line into two words.
+             */
             if(checkSpaces(line)) {
                 System.out.println("Error. More than one space used." +
                                    " Please use one space to separate words.");
@@ -40,6 +52,13 @@ public class Proj6_ReadLineTest {
                 secondWord = line.substring(index+1,line.length());
             }
             
+            //Check if only one word was entered, if so print error and reloop
+            if(firstWord.isEmpty() || secondWord.isEmpty()){
+                System.out.println("Error. One word entered.");
+                continue;
+            }
+            
+            //Display the two words obtained by separation of line
             System.out.println("First Word is " + firstWord);
             System.out.println("Second Word is " + secondWord);
         }
