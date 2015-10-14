@@ -21,6 +21,10 @@ public class Proj6_InteractiveDraw {
         //Create new Scanner object to take in user input
         Scanner in = new Scanner(System.in);
         
+        //Available colors and shapes stored in separate array of String
+        final String[] COLORS = {"RED","BLUE","GREEN","WHITE","BLACK"};
+        final String[] SHAPES = {"CIRCLE","SQUARE","RECTANGLE"};
+        
         /*
          * Start loop:
          * 1)ask user for two words separated by space (color shape)
@@ -30,7 +34,7 @@ public class Proj6_InteractiveDraw {
          *   -if shape or color is not available, restart loop
          * 4)start over loop
          */
-        System.out.println("Enter two words separated by space");
+        System.out.println("Enter two words separated by space(color shape)");
         while(in.hasNextLine()) {
             String line = in.nextLine();   //store the line entered to line
             int index = line.indexOf(' '); //find index of space
@@ -56,10 +60,34 @@ public class Proj6_InteractiveDraw {
                 secondWord = line.substring(index+1,line.length());
             }
             
+            //Check if only one word was entered, if so print error and reloop
+            if(firstWord.isEmpty() || secondWord.isEmpty()){
+                System.out.println("Error. One word entered.");
+                continue;
+            }
+            
+            //sets words to upper case to avoid case sensitivity
+            String upperFirst = firstWord.toUpperCase();
+            String upperSecond = secondWord.toUpperCase();
+            
             //Check for color, if not available print error and restart loop
-            //Colors: Red, Green, Blue, White, Black
-            String upper = firstWord.toUpperCase();
-            switch(upper) {
+            if(!checkColors(upperFirst,COLORS)){
+                System.out.println("Color not available. Please " +
+                                       "Choose a different color.");
+                continue;
+            }
+            //Check for shape if not available, print error and restart loop
+            if(!checkShapes(upperSecond,SHAPES)){
+                System.out.println("Shape not available. Please " +
+                                       "Choose a different shape.");
+                continue;
+            }
+            
+            //Set scale x:[0,100] y:[0,100]
+            StdDraw.setScale(0,100);
+            
+            //Sets the color for the shape to be drawn
+            switch(upperFirst) {
                 case("RED"):
                     StdDraw.setPenColor(StdDraw.RED);
                     break;
@@ -75,10 +103,6 @@ public class Proj6_InteractiveDraw {
                 case("BLACK"):
                     StdDraw.setPenColor(StdDraw.BLACK);
                     break;
-                default:
-                    System.out.println("Color not available. Please " +
-                                       "Choose a different color.");
-                    continue;
             }
             
             //Size for all shapes
@@ -93,13 +117,8 @@ public class Proj6_InteractiveDraw {
             int xPos = (int)(4 + rand.nextDouble() * 92);
             int yPos = (int)(2+ rand.nextDouble() * 96);
             
-            //Set scale x:[0,100] y:[0,100]
-            StdDraw.setScale(0,100);
-            
-            //Check for shape if not available, print error and restart loop
-            //Shapes: Circle, Square, Rectangle
-            upper = secondWord.toUpperCase();
-            switch(upper) {
+            //Draws the shape
+            switch(upperSecond) {
                 case("CIRCLE"):
                     StdDraw.filledCircle(xPos,yPos,SIZE);
                     break;
@@ -109,10 +128,6 @@ public class Proj6_InteractiveDraw {
                 case("RECTANGLE"):
                     StdDraw.filledRectangle(xPos,yPos,2*SIZE,SIZE);
                     break;
-                default:
-                    System.out.println("Shape not available. Please " +
-                                       "Choose a different shape.");
-                    continue;
             }
             
             //Display the two words obtained by separation of line
@@ -120,7 +135,8 @@ public class Proj6_InteractiveDraw {
             System.out.println("Second Word(Shape) is " + secondWord);
             
             //Prompt user again for line
-            System.out.println("Enter two words separated by space");
+            System.out.println("Enter two words separated by space"+
+                               "(color shape)");
         }
     }
     
@@ -145,5 +161,37 @@ public class Proj6_InteractiveDraw {
         else {
             return false;
         }
+    }
+    
+    /*
+     * Checks if color is available, contained in array.
+     * 
+     * @param color The color to be checked if available
+     * @param list The list of available colors
+     * @returns True if available, false if not
+     */
+    public static boolean checkColors(String color, String[] list){
+        for(int i=0;i<list.length;i++){
+            if(list[i].equals(color)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /*
+     * Checks if shape is available, contained in array.
+     * 
+     * @param shape The shape to be checked if available
+     * @param list The list of available shapes
+     * @returns True if available, false if not
+     */
+    public static boolean checkShapes(String shape, String[] list){
+        for(int i=0;i<list.length;i++){
+            if(list[i].equals(shape)){
+                return true;
+            }
+        }
+        return false;
     }
 }
